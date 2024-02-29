@@ -1,8 +1,13 @@
 import socket
+import classeCliente
 
 def main():
     HOST = '192.168.100.100'  # Endereço IP do servidor
     PORT = 5000         # Porta do servidor
+    cli1 = Cliente();
+    cli1.nome = 'suruagy'
+    cli1.settar(HOST,PORT)
+
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
