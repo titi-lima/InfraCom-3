@@ -3,7 +3,7 @@ import socket
 
 HOST = '192.168.100.100'  # Endereço IP do servidor
 PORT = 5000         # Porta do servidor
-HOST2 = 5500 
+PORT2 = 5500 
 
 def sala(self,nome, status,dia,horario,usuario):
        self.status = status
@@ -85,7 +85,7 @@ salasList = [sala1,sala2,sala3,sala4.sala5]
 
 #conectar usuarios
 connectar('Joao',socketList,HOST,PORT)
-connectar('Maria', socketList, HOST2,PORT)
+connectar('Maria', socketList, HOST,PORT2)
 
 
 
