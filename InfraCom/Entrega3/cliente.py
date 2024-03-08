@@ -5,21 +5,31 @@ HOST = '192.168.100.100'  # Endereço IP do servidor
 PORT = 5000         # Porta do servidor
 PORT2 = 5500 
 
-def sala(self,nome, status,dia,horario,usuario):
+class Sala:
+
+  def __init__(self,nome, status,dia,horario,usuario):
        self.status = status
        self.dia = dia
        self.horario = horario
        self.usuario = usuario
        self.nome = nome
 
-def settar(endFamilia,tipoProtocolo,nome):
-        return socket.socket(endFamilia, tipoProtocolo) #criando socket tcp da familia ipv6
+class Conexao:
+
+  def __init__(self,endFamilia,tipoProtocolo,nome,flag):
+       
+        self.end = endFamilia
+        self.proto = tipoProtocolo
+        self.nome = nome
+        self.flag = flag
+        self.soq = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+
+  
 
 
 
-
-def connectar(nome_do_usuario,socketlist,host,port):
-        for soq in socketList:
+  def connectar(nome_do_usuario,socketlist,host,port):
+        for soq in socketlist:
                 if(soq.nome.equals(nome_do_usuario)):
                     soq.connect((host,port)) #aqui conecta com o servidor
                     soq.flag = True
@@ -36,13 +46,13 @@ def connectar(nome_do_usuario,socketlist,host,port):
                     dadoRecebido = soq.recv(1024)#1024 butes
                     print("MENSAGEM RECEBIDA", dadoRecebido.decode())
 
-def list():
+def list(socketlist):
 #listar os usuarios conectados no momento    
-       for soq in socketList:
+       for soq in socketlist:
             if soq.flag == True:
                    print(soq.nome) 
 
-def reservar(sala,dia,horario,socketList,soq):
+def reservar(sala,dia,horario,soq):
        #verificar se a sala está ocupada 
        if sala.flag == True:
               return print("A sala", sala.nome, "já está ocupada")    
@@ -56,7 +66,7 @@ def reservar(sala,dia,horario,socketList,soq):
               return print(soq.nome, 'reservou a sala ', sala.nome, 'às', horario, 'da', dia)
 
 def bye(nome,socketlist):
-       for soq in socketList:
+       for soq in socketlist:
               if(soq.name.equals(nome)):
                      soq.close()
                      return print(nome,"Encerrou a conexao")
@@ -65,27 +75,27 @@ def bye(nome,socketlist):
 
 
 
-client_soquete1 = settar(socket.AF_INET, socket.SOCK_STREAM)
-client_soquete1.nome = 'Joao'
+client_soquete1 = Conexao(socket.AF_INET, socket.SOCK_STREAM,'Joao', False)
+client_soquete2 = Conexao(socket.AF_INET, socket.SOCK_STREAM, 'Maria', False)
 
-client_soquete2 = settar(socket.AF_INET, socket.SOCK_STREAM)
-client_soquete2.nome = 'Maria'
+
+
 
 #criando lista de 2 sockets
 socketList = [client_soquete1, client_soquete2]
 
 #criando lista de 5 salas
-sala1= sala('E101',False,0,0)
-sala2= sala('E101',False,0,0)
-sala3= sala('E101',False,0,0)
-sala4= sala('E101',False,0,0)
-sala5= sala('E101',False,0,0)
+sala1= Sala('E101',False,0,0,None)
+sala2= Sala('E101',False,0,0,None)
+sala3= Sala('E101',False,0,0, None)
+sala4= Sala('E101',False,0,0,None)
+sala5= Sala('E101',False,0,0, None)
 
-salasList = [sala1,sala2,sala3,sala4.sala5]
+salasList = [sala1,sala2,sala3,sala4,sala5]
 
 #conectar usuarios
-connectar('Joao',socketList,HOST,PORT)
-connectar('Maria', socketList, HOST,PORT2)
+client_soquete1.connectar('Joao',socketList,HOST,PORT)
+client_soquete2.connectar('Maria', socketList, HOST,PORT2)
 
 
 
