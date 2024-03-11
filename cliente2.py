@@ -24,9 +24,6 @@ class Conexao:
         self.flag = flag
         self.soq = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 
-  
-
-
 
   def connectar(nome_do_usuario,socketlist,host,port):
         for soq in socketlist:
