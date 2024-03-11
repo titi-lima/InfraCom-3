@@ -1,4 +1,4 @@
-import socket
+import socket 
 import random
 
 
@@ -14,8 +14,7 @@ class RDT:
         self.num_seq_s = 0
         
         #vincula o socket do server a porta especificada.
-        if(type == 'server'):
-            self.udp.bind(("", addrPort))
+        self.udp.bind(("", addrPort))
     
     def __del__(self):
         self.udp.close()
@@ -74,7 +73,7 @@ class RDT:
             self.udt_send(sndpkt, addr)
             try:
                 print('waiting for ack')
-                rcvpkt = self.rdt_rcv('wait_ack')
+                rcvpkt, add = self.rdt_rcv('wait_ack')
                 if rcvpkt['num_seq'] == self.num_seq_c and rcvpkt['data'] == b'ACK':
                     break
             except socket.timeout:
@@ -100,7 +99,7 @@ class RDT:
             while(not rcvpkt or rcvpkt['num_seq'] != self.num_seq_s):
                 rcvpkt, addr = self.udt_rcv()
                 sndack = self.make_pkt(b'ACK',self.num_seq_s)
-                self.udt_send(sndack)
+                self.udt_send(sndack, addr)
             
             sndack = self.make_pkt(b'ACK',rcvpkt['num_seq'])
             rcvpkt = rcvpkt['data']
@@ -108,6 +107,3 @@ class RDT:
             self.num_seq_s = 1 - self.num_seq_s
         
         return rcvpkt, addr
-    
-        
-        

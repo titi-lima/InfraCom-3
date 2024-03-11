@@ -4,7 +4,9 @@ import socket
 from server import Cliente
 from server import Sala
 
+host = socket.gethostbyname(socket.gethostname())
 clientPort = 5000
+serverPort = 13009
 
 while True:
     try:
@@ -18,14 +20,14 @@ lock = threading.Lock()
 def rcv_data():
     while True:
         clientRcv.reset_num_seq()
-        rcv_pkt = clientRcv.rdt_rcv()
+        rcv_pkt, addr = clientRcv.rdt_rcv()
         print(rcv_pkt)
 
 def snd_data():
     print("Qual o seu nome?")
     nome = input()
     connectString = "connect " + nome
-    clientRcv.rdt_send(connectString)
+    clientRcv.rdt_send(connectString, (host, serverPort))
     while True:
         print("Escolha sua operação:")
         print("Verificar disponibilidade em sala específica - 1")
@@ -37,26 +39,28 @@ def snd_data():
         #print('\n')
         if data == 1:
             sala = input("Digite o número da sala: ")
-            string = "check " + sala
-            clientRcv.rdt_send(string)     #:)
+            dia = input("Digite o número da sala: ")
+            horario = input("Digite o horário: ")
+            string = "check " + sala + " " + dia + " " + horario
+            clientRcv.rdt_send(string, (host, serverPort))    
         elif data == 2:
             sala = input("Digite o número da sala: ")
             dia = input("Digite o dia desejado: ")
             hora = input ("Digite o horário desejado: ")
             string = "reservar " + sala + " " + dia + " " + hora
-            clientRcv.rdt_send(string)
+            clientRcv.rdt_send(string, (host, serverPort))
         elif data == 3:
             sala = input("Digite o número da sala: ")
             dia = input("Digite o dia da reserva: ")
             hora = input ("Digite o horário da reserva: ")
             string = "cancelar " + sala + " " + dia + " " + hora
-            clientRcv.rdt_send(string)
+            clientRcv.rdt_send(string, (host, serverPort))
         elif data == 4:
             string = "list"
-            clientRcv.rdt_send(string)
+            clientRcv.rdt_send(string, (host, serverPort))
         elif data == 5:
             string = "bye"
-            clientRcv.rdt_send(string)
+            clientRcv.rdt_send(string, (host, serverPort))
         clientRcv.reset_num_seq()
     
 def main():
