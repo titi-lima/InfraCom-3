@@ -69,24 +69,27 @@ def reserve(server, nome, numero, dia, horario):
     client_nomes = [client.nome for client in clients]  # List of client names
     if nome in client_nomes:
         for sala in salasList:
-            if sala.nome == numero and sala.agenda[int(dia)][int(horario)] == "":
-                sala.agenda[int(dia)][int(horario)] = nome
-                msg = "Reservada confirmada"
-                msg_all = (
-                    "Reservada confirmada para "
-                    + nome
-                    + " na sala "
-                    + numero
-                    + " no dia "
-                    + dia
-                    + " no horário "
-                    + horario
-                )
-                send_everyone(server, msg_all)
-                return msg
-            else:
-                msg = "Sala ocupada por " + sala.agenda[int(dia)][int(horario)]
-                return msg
+            if sala.nome == numero:
+                if sala.agenda[int(dia)][int(horario)] == "":
+                    sala.agenda[int(dia)][int(horario)] = nome
+                    msg = "Reservada confirmada"
+                    msg_all = (
+                        "Reservada confirmada para "
+                        + nome
+                        + " na sala "
+                        + numero
+                        + " no dia "
+                        + dia
+                        + " no horário "
+                        + horario
+                    )
+                    send_everyone(server, msg_all)
+                    return msg
+                else:
+                    msg = "Sala ocupada por " + sala.agenda[int(dia)][int(horario)]
+                    return msg
+        msg = "Sala não encontrada"
+        return msg
     else:
         msg = "Você não está conectado"
         return msg
