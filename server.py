@@ -100,7 +100,7 @@ def cancel(server, nome, numero, dia, horario):
     if nome in client_nomes:
         for sala in salasList:
             if sala.nome == numero and sala.agenda[int(dia)][int(horario)] == nome:
-                sala.agenda[dia][horario] = ""
+                sala.agenda[int(dia)][int(horario)] = ""
                 msg = "Reserva cancelada"
                 msg_all = (
                     "Reserva cancelada para "
@@ -149,11 +149,18 @@ def main():
         print("Server receiving")
         server.reset_num_seq()
         rcvpkt, addr = server.rdt_rcv()  # iniciando modo de escuta
-        msg = rcvpkt["data"].split(" ")
+        if isinstance(rcvpkt["data"], bytes):
+            msg = rcvpkt["data"].decode("utf-8").split(" ")
+        else:
+            msg = rcvpkt["data"].split(" ")
         if msg[0] == "connect":
             print("Server received connection request")
             # TODO: fazer função que enviar que recebe uma mensagem como parametro e envia ela para todos os usuarios conectados
-            clients.append(Cliente(addr[1], msg[1], True))
+            for client in clients:
+                if client.nome == msg[1]:
+                    break
+            else:
+                clients.append(Cliente(addr[1], msg[1], True))
             send_everyone(server, msg[1] + " está conectado")
             server.rdt_send("Connected", addr)
         elif msg[0] == "check":
