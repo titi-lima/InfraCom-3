@@ -5,7 +5,7 @@ import random
 class RDT:
     # Construtor da classe. Inicializa o socket UDP, define o tipo (cliente ou servidor),
     # o endereço e a porta de comunicação, e inicializa os números de sequência para controle.
-    def __init__(self, type: str, addrPort: int = 5000, addrName: str = "localhost"):
+    def __init__(self, type: str, addrPort: int = 5000, addrName: str = "127.0.1.1"):
         self.udp = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.addrPort = addrPort
         self.addrName = addrName
@@ -14,7 +14,7 @@ class RDT:
         self.num_seq_s = 0
 
         # vincula o socket do server a porta especificada.
-        self.udp.bind(("", addrPort))
+        self.udp.bind((self.addrName, addrPort))
 
     def __del__(self):
         self.udp.close()
